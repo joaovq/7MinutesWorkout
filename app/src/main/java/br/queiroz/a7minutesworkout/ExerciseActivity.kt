@@ -1,0 +1,231 @@
+package br.queiroz.a7minutesworkout
+
+import android.media.MediaPlayer
+import android.net.Uri
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.os.CountDownTimer
+import android.speech.tts.TextToSpeech
+import android.util.Log
+import android.view.View
+import android.widget.Toast
+import androidx.core.view.isVisible
+import androidx.recyclerview.widget.LinearLayoutManager
+import br.queiroz.a7minutesworkout.adapter.ExerciseStatusAdapter
+import br.queiroz.a7minutesworkout.databinding.ActivityExerciseBinding
+import br.queiroz.a7minutesworkout.model.ExerciseModel
+import java.util.*
+import kotlin.collections.ArrayList
+
+class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
+
+    private var binding:ActivityExerciseBinding? = null
+    private var restTimer:CountDownTimer? = null
+    private var restProgress = 0
+    private var exerciseTimer:CountDownTimer? = null
+    private var exerciseProgress = 0
+    private var exerciseList:ArrayList<ExerciseModel>? = null
+    private var currentExerciseposition = -1
+    private var tts: TextToSpeech? = null
+    private var player: MediaPlayer? = null
+
+    private var exerciseAdapter: ExerciseStatusAdapter? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityExerciseBinding.inflate(layoutInflater)
+        setContentView(binding?.root)
+
+        setSupportActionBar(binding?.toolbarExercise)
+
+        if (supportActionBar!=null){
+//            set display back home arrow
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        }
+
+        exerciseList = Constants.defaultExerciseList()
+
+//        Initialization TextToSpeech
+        tts = TextToSpeech(this, this)
+
+
+        binding?.toolbarExercise?.setNavigationOnClickListener {
+//            onBackPressed() is deprecated
+//            Same action of click in button back android
+            onBackPressedDispatcher.onBackPressed()
+        }
+
+        setupRestView()
+        setupExerciseStatusRecyclerView()
+    }
+
+    private fun setupExerciseStatusRecyclerView(){
+//        SetUp RecyclerView for show total exercises in list
+//        Configure LayoutManager
+        binding?.rvExerciseStatus?.layoutManager = LinearLayoutManager(
+            this,
+            LinearLayoutManager.HORIZONTAL, false
+        )
+//        Set Has fixeSize for performance
+        binding?.rvExerciseStatus?.setHasFixedSize(true)
+//        Instance of adapter
+        exerciseAdapter = ExerciseStatusAdapter(exerciseList!!)
+//      create adapter
+        binding?.rvExerciseStatus?.adapter = exerciseAdapter
+    }
+
+    private fun setupRestView(){
+
+        try {
+//            Add a sound when start exercise
+//            Link for sound in resources
+            val soundURI = Uri
+                .parse("android.resource://br.queiroz.a7minutesworkout/" +
+                    R.raw.press_start)
+            player = MediaPlayer.create(applicationContext, soundURI)
+            player?.isLooping = false
+            player?.start()
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
+
+
+        if (binding?.flExerciseView?.isVisible == true){
+//            if Exercise View is visible, do it
+            binding?.flExerciseView?.visibility = View.GONE
+            binding?.flRestView?.visibility = View.VISIBLE
+            binding?.tvTitle?.visibility = View.VISIBLE
+            binding?.tvExerciseName?.visibility = View.INVISIBLE
+            binding?.ivExercise?.visibility = View.INVISIBLE
+        }
+//        Show in RestView for upcoming exercise
+        binding?.tvUpcomingLabel?.visibility = View.VISIBLE
+        binding?.tvUpcomingExerciseName?.visibility = View.VISIBLE
+        if (restTimer!=null){
+            //            cancel CountDownTimer and reset progress
+            restTimer?.cancel()
+            restProgress = 0
+        }
+
+        binding?.tvUpcomingExerciseName?.text =
+            exerciseList!![currentExerciseposition+1]
+                .getName()
+        setRestProgressBar()
+    }
+    private fun setRestProgressBar(){
+        binding?.progressBar?.progress = restProgress
+        binding?.tvTimer?.text = 10.toString()
+
+        restTimer = object : CountDownTimer(10000, 1000){
+            override fun onTick(millisUntilFinished: Long) {
+                restProgress++
+                binding?.progressBar?.progress = 10-restProgress
+                binding?.tvTimer?.text = (10-restProgress).toString()
+            }
+
+            override fun onFinish() {
+                currentExerciseposition++
+                setupExerciseView()
+            }
+
+        }.start()
+
+    }
+
+    private fun setupExerciseView(){
+        binding?.flRestView?.visibility = View.INVISIBLE
+        binding?.tvTitle?.visibility = View.INVISIBLE
+        binding?.tvExerciseName?.visibility = View.VISIBLE
+        binding?.ivExercise?.visibility = View.VISIBLE
+        binding?.flExerciseView?.visibility = View.VISIBLE
+        binding?.tvUpcomingLabel?.visibility = View.INVISIBLE
+        binding?.tvUpcomingExerciseName?.visibility = View.INVISIBLE
+
+        if (exerciseTimer!=null){
+//            cancel CountDownTimer and reset progress
+            exerciseTimer?.cancel()
+            exerciseProgress = 0
+        }
+
+        speakOut(exerciseList!![currentExerciseposition].getName())
+
+        binding?.ivExercise?.setImageResource(
+            exerciseList!![currentExerciseposition].getImage()
+        )
+        binding?.tvExerciseName?.text = exerciseList!![currentExerciseposition]
+            .getName()
+
+        setExerciseProgressBar()
+    }
+    private fun setExerciseProgressBar(){
+        binding?.progressBarExercise?.progress = exerciseProgress
+        binding?.tvTimerExercise?.text = 30.toString()
+
+        exerciseTimer = object : CountDownTimer(30000, 1000){
+            override fun onTick(millisUntilFinished: Long) {
+//                CountDown is here
+                exerciseProgress++
+                binding?.progressBarExercise?.progress = 30-exerciseProgress
+                binding?.tvTimerExercise?.text = (30-exerciseProgress).toString()
+            }
+
+            override fun onFinish() {
+//                When finish method onTick
+                if (currentExerciseposition < exerciseList?.size!!-1){
+                    setupRestView()
+                    Toast.makeText(this@ExerciseActivity,
+                        "You got it, keep going",
+                        Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(this@ExerciseActivity,
+                        "Congratulations, You have completed the 7 minutes workout.",
+                        Toast.LENGTH_SHORT).show()
+                }
+            }
+
+        }.start()
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (restTimer!=null){
+            //            cancel CountDownTimer and reset progress
+            restTimer?.cancel()
+            restProgress = 0
+        }
+        if (exerciseTimer!=null){
+            //            cancel CountDownTimer and reset progress
+            exerciseTimer?.cancel()
+            exerciseProgress = 0
+        }
+        if (tts !=null){
+            tts?.stop()
+            tts?.shutdown()
+        }
+        if (player !=null){
+            player?.stop()
+        }
+
+        binding = null
+    }
+
+//    Init obrigatory for implement TextToSpeech
+    override fun onInit(status: Int) {
+
+        if (status==TextToSpeech.SUCCESS){
+            val result = tts?.setLanguage(Locale.US)
+            if (result == TextToSpeech.LANG_MISSING_DATA
+                || result == TextToSpeech.LANG_NOT_SUPPORTED){
+                Log.e("TTS", "The Language specified is not supported")
+            }else{
+                Log.e("TTS", "Initialization Failed!")
+
+            }
+        }
+    }
+//    Speak the text. Operational System speak the text
+    private fun speakOut(text:String){
+        tts!!.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
+    }
+}
