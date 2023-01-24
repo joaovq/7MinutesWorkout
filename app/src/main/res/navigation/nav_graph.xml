@@ -12,7 +12,7 @@
         tools:layout="@layout/activity_main" />
     <activity
         android:id="@+id/exerciseActivity"
-        android:name="br.queiroz.a7minutesworkout.ExerciseActivity"
+        android:name="br.queiroz.a7minutesworkout.activities.ExerciseActivity"
         android:label="activity_exercise"
         tools:layout="@layout/activity_exercise" />
 </navigation>

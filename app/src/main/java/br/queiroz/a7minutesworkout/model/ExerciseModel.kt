@@ -40,7 +40,7 @@ class ExerciseModel(
         this.isCompleted = isCompleted
     }
 
-    fun getIsSelected(isSelected: Boolean) :Boolean{
+    fun getIsSelected() :Boolean{
         return isSelected
     }
 

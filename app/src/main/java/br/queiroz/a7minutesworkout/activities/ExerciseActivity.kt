@@ -1,5 +1,6 @@
-package br.queiroz.a7minutesworkout
+package br.queiroz.a7minutesworkout.activities
 
+import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +12,8 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
+import br.queiroz.a7minutesworkout.Constants
+import br.queiroz.a7minutesworkout.R
 import br.queiroz.a7minutesworkout.adapter.ExerciseStatusAdapter
 import br.queiroz.a7minutesworkout.databinding.ActivityExerciseBinding
 import br.queiroz.a7minutesworkout.model.ExerciseModel
@@ -26,6 +29,8 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private var exerciseProgress = 0
     private var exerciseList:ArrayList<ExerciseModel>? = null
     private var currentExerciseposition = -1
+    private var restTimerDuration = 1L
+    private var execiseTimerDuration = 1L
     private var tts: TextToSpeech? = null
     private var player: MediaPlayer? = null
 
@@ -81,7 +86,8 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 //            Link for sound in resources
             val soundURI = Uri
                 .parse("android.resource://br.queiroz.a7minutesworkout/" +
-                    R.raw.press_start)
+                        R.raw.press_start
+                )
             player = MediaPlayer.create(applicationContext, soundURI)
             player?.isLooping = false
             player?.start()
@@ -116,7 +122,7 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         binding?.progressBar?.progress = restProgress
         binding?.tvTimer?.text = 10.toString()
 
-        restTimer = object : CountDownTimer(10000, 1000){
+        restTimer = object : CountDownTimer(restTimerDuration*1000, 1000){
             override fun onTick(millisUntilFinished: Long) {
                 restProgress++
                 binding?.progressBar?.progress = 10-restProgress
@@ -125,6 +131,10 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
             override fun onFinish() {
                 currentExerciseposition++
+
+                exerciseList!![currentExerciseposition].setIsSelectec(true)
+                exerciseAdapter!!.notifyItemChanged(currentExerciseposition)
+
                 setupExerciseView()
             }
 
@@ -161,7 +171,7 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         binding?.progressBarExercise?.progress = exerciseProgress
         binding?.tvTimerExercise?.text = 30.toString()
 
-        exerciseTimer = object : CountDownTimer(30000, 1000){
+        exerciseTimer = object : CountDownTimer(execiseTimerDuration*1000, 1000){
             override fun onTick(millisUntilFinished: Long) {
 //                CountDown is here
                 exerciseProgress++
@@ -172,19 +182,26 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             override fun onFinish() {
 //                When finish method onTick
                 if (currentExerciseposition < exerciseList?.size!!-1){
+                    exerciseList!![currentExerciseposition].setIsSelectec(false)
+                    exerciseList!![currentExerciseposition].setIsCompleted(true)
+                    exerciseAdapter!!.notifyItemChanged(currentExerciseposition)
                     setupRestView()
                     Toast.makeText(this@ExerciseActivity,
                         "You got it, keep going",
                         Toast.LENGTH_SHORT).show()
                 }else{
+                    val intentFinish = Intent(
+                        this@ExerciseActivity,
+                        FinishActivity::class.java
+                    )
+                    startActivity(intentFinish)
+                    finish()
                     Toast.makeText(this@ExerciseActivity,
                         "Congratulations, You have completed the 7 minutes workout.",
                         Toast.LENGTH_SHORT).show()
                 }
             }
-
         }.start()
-
     }
 
     override fun onDestroy() {
