@@ -3,7 +3,6 @@ package br.queiroz.a7minutesworkout
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import br.queiroz.a7minutesworkout.activities.BMIActivity
 import br.queiroz.a7minutesworkout.activities.ExerciseActivity
 import br.queiroz.a7minutesworkout.databinding.ActivityMainBinding
