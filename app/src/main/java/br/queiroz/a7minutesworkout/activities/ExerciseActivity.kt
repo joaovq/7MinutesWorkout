@@ -1,5 +1,6 @@
 package br.queiroz.a7minutesworkout.activities
 
+import android.app.Dialog
 import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
@@ -16,6 +17,7 @@ import br.queiroz.a7minutesworkout.Constants
 import br.queiroz.a7minutesworkout.R
 import br.queiroz.a7minutesworkout.adapter.ExerciseStatusAdapter
 import br.queiroz.a7minutesworkout.databinding.ActivityExerciseBinding
+import br.queiroz.a7minutesworkout.databinding.DialogCustomBackConfirmationBinding
 import br.queiroz.a7minutesworkout.model.ExerciseModel
 import java.util.*
 import kotlin.collections.ArrayList
@@ -29,8 +31,8 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private var exerciseProgress = 0
     private var exerciseList:ArrayList<ExerciseModel>? = null
     private var currentExerciseposition = -1
-    private var restTimerDuration = 1L
-    private var execiseTimerDuration = 1L
+    private var restTimerDuration = 10L
+    private var execiseTimerDuration = 30L
     private var tts: TextToSpeech? = null
     private var player: MediaPlayer? = null
 
@@ -55,13 +57,36 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
 
         binding?.toolbarExercise?.setNavigationOnClickListener {
-//            onBackPressed() is deprecated
-//            Same action of click in button back android
-            onBackPressedDispatcher.onBackPressed()
+            showCustomBackConfirmationDialog()
         }
 
         setupRestView()
         setupExerciseStatusRecyclerView()
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        showCustomBackConfirmationDialog()
+//        super.onBackPressed()
+    }
+
+    private fun showCustomBackConfirmationDialog(){
+        val customDialogBack = Dialog(this)
+
+        val bindingDialog = DialogCustomBackConfirmationBinding
+            .inflate(layoutInflater)
+        customDialogBack.setContentView(bindingDialog.root)
+        customDialogBack.setCanceledOnTouchOutside(false)
+        bindingDialog.btnYes.setOnClickListener {
+                this@ExerciseActivity.finish()
+                customDialogBack.dismiss()
+        }
+        bindingDialog.btnNo.setOnClickListener{
+            customDialogBack.dismiss()
+        }
+
+        customDialogBack.setCancelable(true)
+        customDialogBack.show()
     }
 
     private fun setupExerciseStatusRecyclerView(){
@@ -131,7 +156,6 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
             override fun onFinish() {
                 currentExerciseposition++
-
                 exerciseList!![currentExerciseposition].setIsSelectec(true)
                 exerciseAdapter!!.notifyItemChanged(currentExerciseposition)
 
@@ -229,16 +253,15 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
 //    Init obrigatory for implement TextToSpeech
     override fun onInit(status: Int) {
-
         if (status==TextToSpeech.SUCCESS){
             val result = tts?.setLanguage(Locale.US)
             if (result == TextToSpeech.LANG_MISSING_DATA
                 || result == TextToSpeech.LANG_NOT_SUPPORTED){
                 Log.e("TTS", "The Language specified is not supported")
-            }else{
-                Log.e("TTS", "Initialization Failed!")
-
             }
+        }
+        else{
+            Log.e("TTS", "Initialization Failed!")
         }
     }
 //    Speak the text. Operational System speak the text

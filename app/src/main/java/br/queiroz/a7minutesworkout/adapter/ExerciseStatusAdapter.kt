@@ -1,18 +1,18 @@
 package br.queiroz.a7minutesworkout.adapter
 
-import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import br.queiroz.a7minutesworkout.R
 import br.queiroz.a7minutesworkout.databinding.ItemExerciseStatusBinding
 import br.queiroz.a7minutesworkout.model.ExerciseModel
+import br.queiroz.a7minutesworkout.util.ExerciseDiffUtil
 
 class ExerciseStatusAdapter(
-    val items:ArrayList<ExerciseModel>
+    private var exerciseModels:ArrayList<ExerciseModel>
 ) : RecyclerView.Adapter<ExerciseStatusAdapter.ExerciseStatusViewHolder>() {
     inner class ExerciseStatusViewHolder(binding: ItemExerciseStatusBinding)
         :RecyclerView.ViewHolder(binding.root){
@@ -29,7 +29,7 @@ class ExerciseStatusAdapter(
     }
 
     override fun onBindViewHolder(holder: ExerciseStatusViewHolder, position: Int) {
-        val model:ExerciseModel = items[position]
+        val model:ExerciseModel = exerciseModels[position]
         holder.tvItem.text = model.getId().toString()
 
         when{
@@ -58,6 +58,15 @@ class ExerciseStatusAdapter(
     }
 
     override fun getItemCount(): Int {
-        return items.size
+        return exerciseModels.size
+    }
+
+//    Use instead of notifyDataSetChanged
+    fun setDataChanged(newListExercises:ArrayList<ExerciseModel>){
+        val exerciseDiffUtil = ExerciseDiffUtil(newListExercises, exerciseModels)
+        val result = DiffUtil.calculateDiff(exerciseDiffUtil)
+        exerciseModels = newListExercises
+
+        result.dispatchUpdatesTo(this)
     }
 }
