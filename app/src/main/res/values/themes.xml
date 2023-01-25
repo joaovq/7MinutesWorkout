@@ -17,6 +17,10 @@
     <style name="ToolbarTheme" parent="@style/ThemeOverlay.MaterialComponents.ActionBar">
         <item name="colorControlNormal">@color/toolbar_color_control_normal</item>
     </style>
-
+<!--    This works in API <=30-->
+    <style name="Theme.SplashScreen" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowBackground">@drawable/splash_bg</item>
+    </style>
 
 </resources>
