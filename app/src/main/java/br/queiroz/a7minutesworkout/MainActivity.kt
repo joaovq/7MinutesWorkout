@@ -9,7 +9,7 @@ import br.queiroz.a7minutesworkout.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    private var binding:ActivityMainBinding? = null
+    private var binding: ActivityMainBinding? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

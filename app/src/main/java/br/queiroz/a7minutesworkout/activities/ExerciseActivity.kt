@@ -152,6 +152,12 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 restProgress++
                 binding?.progressBar?.progress = 10-restProgress
                 binding?.tvTimer?.text = (10-restProgress).toString()
+
+                when{
+                    (10-restProgress)<=3->{
+                        speakOut((10-restProgress).toString())
+                    }
+                }
             }
 
             override fun onFinish() {
