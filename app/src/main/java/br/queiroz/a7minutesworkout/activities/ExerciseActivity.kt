@@ -154,6 +154,7 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 binding?.tvTimer?.text = (10-restProgress).toString()
 
                 when{
+                    (10-restProgress)==0->speakOut("Let's go")
                     (10-restProgress)<=3->{
                         speakOut((10-restProgress).toString())
                     }
@@ -162,7 +163,7 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
             override fun onFinish() {
                 currentExerciseposition++
-                exerciseList!![currentExerciseposition].setIsSelectec(true)
+                exerciseList!![currentExerciseposition].setIsSelected(true)
                 exerciseAdapter!!.notifyItemChanged(currentExerciseposition)
 
                 setupExerciseView()
@@ -204,15 +205,23 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         exerciseTimer = object : CountDownTimer(execiseTimerDuration*1000, 1000){
             override fun onTick(millisUntilFinished: Long) {
 //                CountDown is here
+                player = MediaPlayer.create(this@ExerciseActivity, Uri.parse("android.resource://br.queiroz.a7minutesworkout/" +
+                        R.raw.clock_exercise))
                 exerciseProgress++
                 binding?.progressBarExercise?.progress = 30-exerciseProgress
                 binding?.tvTimerExercise?.text = (30-exerciseProgress).toString()
+                when{
+                    (30-exerciseProgress)==0->speakOut("Take a rest")
+                    (30-exerciseProgress)<=3->{
+                        speakOut((30-exerciseProgress).toString())
+                    }
+                }
             }
 
             override fun onFinish() {
 //                When finish method onTick
                 if (currentExerciseposition < exerciseList?.size!!-1){
-                    exerciseList!![currentExerciseposition].setIsSelectec(false)
+                    exerciseList!![currentExerciseposition].setIsSelected(false)
                     exerciseList!![currentExerciseposition].setIsCompleted(true)
                     exerciseAdapter!!.notifyItemChanged(currentExerciseposition)
                     setupRestView()
