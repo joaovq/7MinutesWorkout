@@ -3,7 +3,7 @@
     android:id="@+id/ll_history_item_main"
     android:layout_width="match_parent"
     android:orientation="horizontal"
-    android:padding="30dp"
+    android:padding="20dp"
     android:layout_height="wrap_content"
     android:background="#EBEBEB"
     >
