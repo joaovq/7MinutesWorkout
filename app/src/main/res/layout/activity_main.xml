@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/main_screen_main_layout_padding"
-    tools:context=".MainActivity">
+    tools:context=".activities.MainActivity">
 
     <ImageView
         android:id="@+id/ivLogo"
@@ -44,8 +44,9 @@
         android:background="@drawable/item_circular_color_accent_background"
         app:layout_constraintTop_toBottomOf="@id/flStart"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/flHistory"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        >
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -57,16 +58,45 @@
             android:textStyle="bold"/>
 
     </FrameLayout>
+    <FrameLayout
+        android:id="@+id/flHistory"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:background="@drawable/item_circular_color_accent_background"
+        app:layout_constraintTop_toBottomOf="@id/flStart"
+        app:layout_constraintStart_toEndOf="@id/flBmi"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_calendar"
+            />
+    </FrameLayout>
+    <TextView
+        android:id="@+id/tvHistory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/flHistory"
+        app:layout_constraintEnd_toEndOf="@id/flHistory"
+        android:textColor="@color/colorAccent"
+        android:text="History"
+        app:layout_constraintTop_toBottomOf="@id/flHistory"
+        />
     <TextView
         android:id="@+id/tvCalculator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="22sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/flBmi"
+        app:layout_constraintEnd_toEndOf="@id/flBmi"
         android:textColor="@color/colorAccent"
         android:text="Calculator"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/flBmi"
         />
 

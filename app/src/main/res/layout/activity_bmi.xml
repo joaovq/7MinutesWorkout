@@ -15,6 +15,7 @@
             android:id="@+id/rgCustomizeUnits"
             android:layout_below="@id/toolbarBMIActivity"
             android:layout_width="match_parent"
+            android:layout_marginTop="10dp"
             android:background="@drawable/drawable_radio_group_tab_background"
             android:layout_height="wrap_content"
             android:orientation="horizontal">

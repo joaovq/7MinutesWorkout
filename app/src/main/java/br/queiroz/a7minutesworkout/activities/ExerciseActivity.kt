@@ -31,8 +31,8 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private var exerciseProgress = 0
     private var exerciseList:ArrayList<ExerciseModel>? = null
     private var currentExerciseposition = -1
-    private var restTimerDuration = 10L
-    private var execiseTimerDuration = 30L
+    private var restTimerDuration = 10L // 10L
+    private var execiseTimerDuration = 30L //30L
     private var tts: TextToSpeech? = null
     private var player: MediaPlayer? = null
 
@@ -113,9 +113,18 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 .parse("android.resource://br.queiroz.a7minutesworkout/" +
                         R.raw.press_start
                 )
+           /* val clockUri = Uri
+                .parse(
+                    "android.resource://br.queiroz.a7minutesworkout/" +
+                            R.raw.clock_exercise
+                )*/
             player = MediaPlayer.create(applicationContext, soundURI)
-            player?.isLooping = false
-            player?.start()
+            player?.apply {
+//                We can set nextMediaPlayer
+//                setNextMediaPlayer(MediaPlayer.create(this@ExerciseActivity,clockUri))
+                isLooping = false
+                start()
+            }
         }catch (e:Exception){
             e.printStackTrace()
         }
@@ -260,7 +269,8 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             tts?.shutdown()
         }
         if (player !=null){
-            player?.stop()
+            player?.release()
+            player = null
         }
 
         binding = null

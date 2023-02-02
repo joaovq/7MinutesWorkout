@@ -39,15 +39,18 @@ class BMIActivity : AppCompatActivity() {
                 displayResult()
             }
             else{
-                Toast.makeText(this@BMIActivity,
-                    "Please enter valid values",
-                    Toast.LENGTH_SHORT
-                ).show()
+                if (validateUSUnits()){
+                    displayResult()
+                }else{
+                    Toast.makeText(this@BMIActivity,
+                        "Please enter valid values",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
 //          with radio buttons, use setOnCheckedListener because this give id which button clicked
         binding?.rgCustomizeUnits?.setOnCheckedChangeListener { _, checkedId:Int ->
-
             if (checkedId == R.id.rbMetricUnits){
                 makeVisibleMetricUnitsView()
             }else{
@@ -87,19 +90,37 @@ class BMIActivity : AppCompatActivity() {
         binding?.llDisplayBMIResult?.visibility = View.INVISIBLE
     }
 
-    private fun calculateBMI(): Float {
-        val heightValue: Float = binding?.etMetricUnitHeight.let {
-            it?.text.toString().toFloat() / 100
-        }
-        val weightValue: Float = binding?.etMetricUnitWeight.let {
-            it?.text.toString().toFloat()
+    private fun calculateUnits(): Float {
+        var heightValue = 0f
+        var weightValue = 0f
+        when(currentVisibleView){
+            METRIC_UNITS_VIEW->{
+                 heightValue = binding?.etMetricUnitHeight.let {
+                    it?.text.toString().toFloat() / 100
+                }
+                weightValue = binding?.etMetricUnitWeight.let {
+                    it?.text.toString().toFloat()
+                }
+            }
+            US_UNITS_VIEW->{
+                val feetValue = binding?.etUsMetricUnitHeightFeet?.text.toString().toFloat()
+                val heightInchValue = binding?.etUsMetricUnitHeightInch.let {
+                    it?.text.toString().toFloat()
+                }
+                heightValue = heightInchValue + feetValue * 12
+                weightValue = binding?.etUsMetricUnitWeight.let {
+                    it?.text.toString().toFloat()
+                }
+
+                return 703 * (weightValue/heightValue.pow(2))
+            }
         }
 
-        return weightValue.div(heightValue.pow(heightValue))
+        return weightValue.div(heightValue.pow(2))
     }
 
     private fun displayResult() {
-        val bmi  = calculateBMI()
+        val bmi  = calculateUnits()
         val bmiLabel:String
         val bmiDescription:String
 
@@ -129,6 +150,24 @@ class BMIActivity : AppCompatActivity() {
         }
         else if (binding?.etMetricUnitHeight?.text.toString().isBlank()){
             isValid = false
+        }
+
+        return isValid
+    }
+    private fun validateUSUnits():Boolean{
+        val isValid:Boolean = when{
+            binding?.etUsMetricUnitWeight?.text.toString().isBlank()-> {
+                false
+            }
+            binding?.etUsMetricUnitHeightFeet?.text.toString().isBlank()-> {
+                 false
+            }
+            binding?.etUsMetricUnitHeightInch?.text.toString().isBlank()->{
+                false
+            }
+            else -> {
+                true
+            }
         }
 
         return isValid

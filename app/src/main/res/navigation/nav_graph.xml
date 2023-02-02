@@ -7,7 +7,7 @@
 
     <activity
         android:id="@+id/mainActivity"
-        android:name="br.queiroz.a7minutesworkout.MainActivity"
+        android:name="br.queiroz.a7minutesworkout.activities.MainActivity"
         android:label="activity_main"
         tools:layout="@layout/activity_main" />
     <activity

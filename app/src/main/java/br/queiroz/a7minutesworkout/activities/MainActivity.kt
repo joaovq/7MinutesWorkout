@@ -1,10 +1,9 @@
-package br.queiroz.a7minutesworkout
+package br.queiroz.a7minutesworkout.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import br.queiroz.a7minutesworkout.activities.BMIActivity
-import br.queiroz.a7minutesworkout.activities.ExerciseActivity
+import br.queiroz.a7minutesworkout.R
 import br.queiroz.a7minutesworkout.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -30,6 +29,16 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(
                     this@MainActivity,
                     BMIActivity::class.java
+                )
+                startActivity(intent)
+            }
+        }
+
+        binding?.flHistory.let {
+            it?.setOnClickListener {
+                val intent = Intent(
+                    this@MainActivity,
+                    HistoryActivity::class.java
                 )
                 startActivity(intent)
             }
