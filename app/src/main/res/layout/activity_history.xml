@@ -9,17 +9,16 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarHistory"
         android:layout_width="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:theme="@style/ToolbarTheme"
+        android:layout_height="?attr/actionBarSize"
         android:background="#FFFFFF"
+        android:theme="@style/ToolbarTheme"
+        app:layout_constraintTop_toTopOf="parent"
         app:title="HISTORY"
-        app:titleTextColor="@color/colorPrimary"
-        android:layout_height="?attr/actionBarSize">
+        app:titleTextColor="@color/colorPrimary">
 
     </androidx.appcompat.widget.Toolbar>
 
     <TextView
-        app:layout_constraintTop_toBottomOf="@id/toolbarHistory"
         android:id="@+id/tvHistory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,20 +27,19 @@
         android:text="EXERCISE COMPLETED"
         android:textSize="18sp"
         android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/toolbarHistory"
         tools:visibility="visible" />
 
     <androidx.recyclerview.widget.RecyclerView
-        app:layout_constraintTop_toBottomOf="@id/tvHistory"
         android:id="@+id/rvHistory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/tvHistory"
         tools:visibility="visible" />
 
     <TextView
-        app:layout_constraintTop_toBottomOf="@id/toolbarHistory"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:id="@+id/tvNoDataAvailable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -50,6 +48,8 @@
         android:textColor="#212121"
         android:textSize="18sp"
         android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbarHistory"
         tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

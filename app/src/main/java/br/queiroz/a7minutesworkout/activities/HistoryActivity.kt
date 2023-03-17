@@ -1,8 +1,8 @@
 package br.queiroz.a7minutesworkout.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
@@ -14,9 +14,7 @@ import br.queiroz.a7minutesworkout.databinding.ActivityHistoryBinding
 import kotlinx.coroutines.launch
 
 class HistoryActivity : AppCompatActivity() {
-    private var binding : ActivityHistoryBinding? = null
-
-
+    private var binding: ActivityHistoryBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +25,7 @@ class HistoryActivity : AppCompatActivity() {
 
         setSupportActionBar(binding?.toolbarHistory)
 
-        if (supportActionBar != null){
+        if (supportActionBar != null) {
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
 
@@ -42,12 +40,11 @@ class HistoryActivity : AppCompatActivity() {
 
     private fun getAllCompletedDates(historyDao: HistoryDao) {
         lifecycleScope.launch {
-            historyDao.fetchAllHistories().collect {
-                history->
-                if (history.isNotEmpty()){
+            historyDao.fetchAllHistories().collect { history ->
+                if (history.isNotEmpty()) {
                     val historyEntities = ArrayList(history)
                     setUpRecyclerViewHistories(historyEntities)
-                }else{
+                } else {
                     binding?.tvNoDataAvailable?.visibility = View.VISIBLE
                     binding?.tvHistory?.visibility = View.INVISIBLE
                     binding?.rvHistory?.visibility = View.INVISIBLE
@@ -56,7 +53,7 @@ class HistoryActivity : AppCompatActivity() {
         }
     }
 
-    private fun setUpRecyclerViewHistories(histories:ArrayList<HistoryEntity>) {
+    private fun setUpRecyclerViewHistories(histories: ArrayList<HistoryEntity>) {
         binding?.tvNoDataAvailable?.visibility = View.INVISIBLE
         binding?.tvHistory?.visibility = View.VISIBLE
 
@@ -69,5 +66,4 @@ class HistoryActivity : AppCompatActivity() {
             adapter = HistoryAdapter(histories)
         }
     }
-
 }

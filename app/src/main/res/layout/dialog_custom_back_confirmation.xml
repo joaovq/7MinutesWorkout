@@ -3,49 +3,51 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
-    >
+    android:padding="16dp">
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Are you sure?"
         android:gravity="center_horizontal"
-        android:textSize="18sp"
+        android:text="Are you sure?"
         android:textColor="@color/black"
-        android:textStyle="bold"
-        />
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
     <TextView
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:gravity="center"
-        android:textStyle="bold"
+        android:text="@string/ask_stop_activity"
         android:textColor="#212121"
-        android:text="@string/ask_stop_activity"/>
+        android:textStyle="bold" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:orientation="horizontal">
+
         <Button
             android:id="@+id/btnYes"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="1"
             android:backgroundTint="@color/colorAccent"
             android:text="Yes"
-            android:layout_weight="1"
-            android:layout_marginEnd="10dp"
-            android:textSize="16sp"
-            android:layout_height="wrap_content"/>
+            android:textSize="16sp" />
+
         <Button
             android:id="@+id/btnNo"
             android:layout_width="0dp"
-            android:backgroundTint="@color/colorAccent"
-            android:text="No"
-            android:textSize="16sp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_weight="1"
-            android:layout_height="wrap_content"/>
+            android:backgroundTint="@color/colorAccent"
+            android:text="No"
+            android:textSize="16sp" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

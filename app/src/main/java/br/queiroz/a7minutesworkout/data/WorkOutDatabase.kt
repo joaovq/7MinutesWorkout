@@ -6,29 +6,28 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(entities = [HistoryEntity::class], version = 1)
-abstract class WorkOutDatabase:RoomDatabase() {
+abstract class WorkOutDatabase : RoomDatabase() {
 
-    abstract fun historyDao():HistoryDao
+    abstract fun historyDao(): HistoryDao
 
-    companion object{
+    companion object {
 
         @Volatile
-        var INSTANCE:WorkOutDatabase? = null
+        var INSTANCE: WorkOutDatabase? = null
 
-        fun getInstance
-                    (context: Context):WorkOutDatabase{
-            synchronized(this){
+        fun getInstance(context: Context): WorkOutDatabase {
+            synchronized(this) {
                 var instance = INSTANCE
-                if (instance==null){
-                   instance = Room.databaseBuilder(
-                       context = context.applicationContext,
-                       WorkOutDatabase::class.java, "seven_minutes_workout"
-                   ).fallbackToDestructiveMigration().build()
-                   INSTANCE = instance
-               }
+                if (instance == null) {
+                    instance = Room.databaseBuilder(
+                        context = context.applicationContext,
+                        WorkOutDatabase::class.java,
+                        "seven_minutes_workout",
+                    ).fallbackToDestructiveMigration().build()
+                    INSTANCE = instance
+                }
                 return instance
             }
-
         }
     }
 }

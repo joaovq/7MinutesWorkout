@@ -3,7 +3,7 @@ package br.queiroz.a7minutesworkout
 import br.queiroz.a7minutesworkout.model.ExerciseModel
 
 object Constants {
-    fun defaultExerciseList():ArrayList<ExerciseModel>{
+    fun defaultExerciseList(): ArrayList<ExerciseModel> {
         val exerciseList = ArrayList<ExerciseModel>()
 
         val jumpingJacks =
@@ -11,8 +11,8 @@ object Constants {
                 1,
                 "Jumping Jacks",
                 R.drawable.ic_jumping_jacks,
-                false,
-                false
+                isCompleted = false,
+                isSelected = false,
             )
         exerciseList.add(jumpingJacks)
 
@@ -21,7 +21,7 @@ object Constants {
             "Wall Sit",
             R.drawable.ic_wall_sit,
             false,
-            false
+            false,
         )
         exerciseList.add(wallSit)
 
@@ -30,7 +30,7 @@ object Constants {
             "Push Up",
             R.drawable.ic_push_up,
             false,
-            false
+            false,
         )
         exerciseList.add(pushUp)
 
@@ -40,7 +40,7 @@ object Constants {
                 "Abdominal Crunch",
                 R.drawable.ic_abdominal_crunch,
                 false,
-                false
+                false,
             )
         exerciseList.add(abdominalCrunch)
 
@@ -50,7 +50,7 @@ object Constants {
                 "Step-Up onto Chair",
                 R.drawable.ic_step_up_onto_chair,
                 false,
-                false
+                false,
             )
         exerciseList.add(stepUpOnChair)
 
@@ -59,7 +59,7 @@ object Constants {
             "Squat",
             R.drawable.ic_squat,
             false,
-            false
+            false,
         )
         exerciseList.add(squat)
 
@@ -69,7 +69,7 @@ object Constants {
                 "Tricep Dip On Chair",
                 R.drawable.ic_triceps_dip_on_chair,
                 false,
-                false
+                false,
             )
         exerciseList.add(tricepDipOnChair)
 
@@ -78,16 +78,17 @@ object Constants {
             "Plank",
             R.drawable.ic_plank,
             false,
-            false
+            false,
         )
         exerciseList.add(plank)
 
         val highKneesRunningInPlace =
             ExerciseModel(
-                9, "High Knees Running In Place",
+                9,
+                "High Knees Running In Place",
                 R.drawable.ic_high_knees_running_in_place,
                 false,
-                false
+                false,
             )
         exerciseList.add(highKneesRunningInPlace)
 
@@ -100,14 +101,12 @@ object Constants {
                 "Push up and Rotation",
                 R.drawable.ic_push_up_and_rotation,
                 false,
-                false
+                false,
             )
         exerciseList.add(pushupAndRotation)
 
         val sidePlank = ExerciseModel(12, "Side Plank", R.drawable.ic_side_plank, false, false)
         exerciseList.add(sidePlank)
-
-
 
         return exerciseList
     }

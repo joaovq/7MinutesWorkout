@@ -1,8 +1,8 @@
 package br.queiroz.a7minutesworkout.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import br.queiroz.a7minutesworkout.WorkOutApp
 import br.queiroz.a7minutesworkout.data.HistoryDao
@@ -14,7 +14,7 @@ import java.util.*
 
 class FinishActivity : AppCompatActivity() {
 
-    private var binding:ActivityFinishBinding? = null
+    private var binding: ActivityFinishBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +23,7 @@ class FinishActivity : AppCompatActivity() {
 
         setSupportActionBar(binding?.toolbarFinishActivity)
 
-        if (supportActionBar!=null){
+        if (supportActionBar != null) {
 //            set display back home arrow
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
@@ -32,25 +32,24 @@ class FinishActivity : AppCompatActivity() {
 //            Same action of click in button back android
             onBackPressedDispatcher.onBackPressed()
         }
-        binding?.btnFinish?.setOnClickListener{
+        binding?.btnFinish?.setOnClickListener {
             finish()
         }
 
         val historyDao = (application as WorkOutApp).db.historyDao()
 
         addDateToDatabase(historyDao)
-
     }
-    private fun addDateToDatabase(historyDao: HistoryDao){
 
+    private fun addDateToDatabase(historyDao: HistoryDao) {
         val calendar = Calendar.getInstance()
         val dateTime = calendar.time
-        Log.e("Date: ", ""+dateTime)
+        Log.e("Date: ", "" + dateTime)
 
         val simpleDateFormat = SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.getDefault())
         val date = simpleDateFormat.format(dateTime)
 
-        Log.e("Formatted Date: ", ""+date)
+        Log.e("Formatted Date: ", "" + date)
 
         lifecycleScope.launch {
             historyDao.insertHistory(HistoryEntity(date))
@@ -61,7 +60,7 @@ class FinishActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
 //        avoid memory leaks
-        if (binding != null){
+        if (binding != null) {
             binding = null
         }
     }
